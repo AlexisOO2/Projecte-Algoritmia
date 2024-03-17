@@ -6,6 +6,7 @@
 #include <cstdlib> 
 #include <ctime>
 #include <climits>
+#include <cmath>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ struct Point {
         for (int i = 0; i < p.vd.size(); i++) {
             dist += (p.vd[i] - vd[i]) * (p.vd[i] - vd[i]);
         }
-        return dist;
+        return sqrt(dist);
     }
 };
 
@@ -53,12 +54,12 @@ vector<Point> readcsv(const string filename,int num_dimensions) {
 
 
 void writecsv(){
-
 }
 
 
 void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, int num_dimensions){
     vector <Point> centroids (num_clusters);
+
 
 
     //Escogemos los puntos que serán los centroides de cada cluster aletoriamente
@@ -71,29 +72,69 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
     }
 
     for (int i = 0; i < num_clusters; ++i){
-        cout << " cluster " << centroids[i].cluster << " points: " << endl; 
+        cout << "Cluster " << centroids[i].cluster << " points: " << endl; 
         for (int j = 0; j < num_dimensions; ++j){
             cout << centroids[i].vd[j] << " ";
         }
         cout << endl;
     }
 
-    //Calculamos la distancia entre cada punto y un cluster y lo asignamos al más próximo.
-    for (int j = 0; j < points.size(); ++j){
-        Point punto = points[j];
+    for (int i = 0; i < iterations /*or change */ ; i++){
 
-        double dist_min = INT_MAX;
-        for (int k = 0; k < num_clusters; ++k){
-            double dist = punto.distance(centroids[k]);
-            //cout << "distancia = " << dist << " al centroide " << k << endl;
+        vector <Point> sumas (num_clusters);
 
-            if (dist < dist_min){
-                dist_min = dist;
-                points[j].cluster = k;
-            }
+        for (int j = 0; j < num_clusters; j++){
+            sumas[j].vd = vector <double> (num_dimensions,0.0);
         }
 
+        vector <int> puntos_x_cluster (num_clusters,0);
+        //Calculamos la distancia entre cada punto y un cluster y lo asignamos al más próximo.
+        for (int j = 0; j < points.size(); ++j){
+            Point punto = points[j];
+
+            double dist_min = INT_MAX;
+            for (int k = 0; k < num_clusters; ++k){
+                double dist = punto.distance(centroids[k]);
+                //cout << "distancia = " << dist << " al centroide " << k << endl;
+
+                if (dist < dist_min){
+                    dist_min = dist;
+                    points[j].cluster = k;
+                }
+            }
+
+            puntos_x_cluster[points[j].cluster] +=1;
+
+            for (int n = 0; n < num_dimensions; n++) {
+                sumas[points[j].cluster].vd[n] += points[j].vd[n];
+            }
+        }
+        
+        for (int l = 0; l < num_clusters; ++l){
+            cout <<"cluster " << l << " tiene: " << endl;
+            cout << puntos_x_cluster[l] << " puntos, su suma es igual a: ";
+
+            for (int m = 0; m < num_dimensions; ++m) cout << sumas[l].vd[m]  << " ";
+            cout << "y su mean es ";
+
+            Point mean;
+            for (int m = 0; m < num_dimensions; ++m){
+                mean.vd.push_back(sumas[l].vd[m]/puntos_x_cluster[l]);
+            }  
+
+            centroids[l] = mean;
+
+            for (int m = 0; m < num_dimensions; ++m) cout << mean.vd[m]  << " ";
+            cout << endl;
+        }
+        cout << endl;
+
+
     }
+
+
+
+    //Recalculamos los centroides de los clústers según los puntos que contiene.
 }
 
 
