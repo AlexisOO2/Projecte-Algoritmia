@@ -37,7 +37,7 @@ vector<Point> readcsv(const string filename, int num_dimensions) {
     vector<Point> points;
     string line,word;
     ifstream file(filename); //Abrimos el fichero de entrada
-
+    bool seen = false;
     //Leemos cada fila
     while (getline(file, line)) {
         stringstream lineStream(line);
@@ -45,13 +45,20 @@ vector<Point> readcsv(const string filename, int num_dimensions) {
 
         // Leemos el valor de cada columna y lo guardamos en los atributos del punto.
         for (int i = 0; i < num_dimensions; i++) {
-            if (getline(lineStream, word, ';')){
+                getline(lineStream, word, ';');
                 double value = stod(word);
                 p.vd.push_back(value);
-            }
+                if (not seen) cout << value;
         }
         //inicializamos el clúster al que pertenece en 0.
+        if (not seen) cout << endl;
         p.cluster = -1;
+
+        if (not seen){
+            for (int i = 0; i < num_dimensions; ++i) cout << p.vd[i] << " ";
+            cout << endl;
+            seen = true;
+        }   
         points.push_back(p);
     }
     return points;
@@ -75,12 +82,13 @@ int main(int argc, char *argv[]) {
     if (argc >= 5) labelled = (atoi(argv[4]) == 1);
     if (argc == 6) k = atoi(argv[5]);
 
+    if (labelled) d++; 
 
     vector<Point> points = readcsv(filename,d);
 
     for (int i = 0; i < 10; ++i){
         cout << "Punto " << i <<" cluster = " << points[i].cluster << " points: "; 
-        for (int j = 0; j < 2; ++j){
+        for (int j = 0; j < d; ++j){
             Point aux = points[i];
             cout << points[i].vd[j] << " ";
         }
