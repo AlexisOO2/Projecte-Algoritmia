@@ -3,22 +3,22 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <string> 
 
 using namespace std;
 
 struct Point {
-    double x, y;     // coordinates
+    vector <double> vd; // vector de p dimensions, cada entrada representa una coordenada en una dimensió donada
     int cluster;     // no default cluster
-    double minDist;  // default infinite distance to nearest cluster
+    double minDist;  // default infinite dist to nearest cluster
 
-    Point() : x(0.0), y(0.0), cluster(-1), minDist(__DBL_MAX__) {}
-    Point(double x, double y) : x(x), y(y), cluster(-1), minDist(__DBL_MAX__) {}
-
-    /**
-     * Computes the (square) euclidean distance between this point and another
-     */
+    // Calcula la distància eucladiana al quadrat entre el punt i un altre punt.
     double distance(Point p) {
-        return (p.x - x) * (p.x - x) + (p.y - y) * (p.y - y);
+        double dist = 0.0;
+        for (int i = 0; i < p.vd.size(); i++) {
+            dist += (p.vd[i] - vd[i]) * (p.vd[i] - vd[i]);
+        }
+        return dist;
     }
 };
 
@@ -27,105 +27,64 @@ struct Point {
  * @return vector of points
  *
  */
-vector<Point> readcsv() {
-    vector<Point> points;
-    string line;
-    ifstream file("mall_data.csv");
 
+void Usage(){
+    cout << "Usage(): ./lloyd filename iterations {ndimensions, labelled, nclusters}" << endl;
+    exit(-1);
+}
+
+vector<Point> readcsv(const string filename, int num_dimensions) {
+    vector<Point> points;
+    string line,word;
+    ifstream file(filename); //Abrimos el fichero de entrada
+
+    //Leemos cada fila
     while (getline(file, line)) {
         stringstream lineStream(line);
-        string bit;
-        double x, y;
-        getline(lineStream, bit, ',');
-        x = stof(bit);
-        getline(lineStream, bit, '\n');
-        y = stof(bit);
+        Point p; // Inicializamos el punto
 
-        points.push_back(Point(x, y));
+        // Leemos el valor de cada columna y lo guardamos en los atributos del punto.
+        for (int i = 0; i < num_dimensions; i++) {
+            if (getline(lineStream, word, ';')){
+                double value = stod(word);
+                p.vd.push_back(value);
+            }
+        }
+        //inicializamos el clúster al que pertenece en 0.
+        p.cluster = -1;
+        points.push_back(p);
     }
     return points;
 }
 
-/**
- * Perform k-means clustering
- * @param points - pointer to vector of points
- * @param epochs - number of k means iterations
- * @param k - the number of initial centroids
- */
-void kMeansClustering(vector<Point>* points, int epochs, int k) {
-    int n = points->size();
 
-    // Randomly initialise centroids
-    // The index of the centroid within the centroids vector
-    // represents the cluster label.
-    vector<Point> centroids;
-    srand(time(0));
-    for (int i = 0; i < k; ++i) {
-        centroids.push_back(points->at(rand() % n));
+
+int main(int argc, char *argv[]) {
+    string filename = ""; // file = Dataset
+    int iterations; // Nº de iteracions
+    int d = -1; // d = Nº Dimensiones
+    bool labelled = false; //etiq = Dataset etiquetat
+    int k = -1; // k = Nº Clústers
+
+    if (argc <= 3) Usage();
+    if (argc >= 4){
+            filename = argv[1];
+            iterations = atoi(argv[2]);
+            d = atoi(argv[3]);
+    }
+    if (argc >= 5) labelled = (atoi(argv[4]) == 1);
+    if (argc == 6) k = atoi(argv[5]);
+
+
+    vector<Point> points = readcsv(filename,d);
+
+    for (int i = 0; i < 10; ++i){
+        cout << "Punto " << i <<" cluster = " << points[i].cluster << " points: "; 
+        for (int j = 0; j < 2; ++j){
+            Point aux = points[i];
+            cout << points[i].vd[j] << " ";
+        }
+        cout << endl;
     }
 
-    for (int i = 0; i < epochs; ++i) {
-        // For each centroid, compute distance from centroid to each point
-        // and update point's cluster if necessary
-        for (vector<Point>::iterator c = begin(centroids); c != end(centroids);
-             ++c) {
-            int clusterId = c - begin(centroids);
-
-            for (vector<Point>::iterator it = points->begin();
-                 it != points->end(); ++it) {
-                Point p = *it;
-                double dist = c->distance(p);
-                if (dist < p.minDist) {
-                    p.minDist = dist;
-                    p.cluster = clusterId;
-                }
-                *it = p;
-            }
-        }
-
-        // Create vectors to keep track of data needed to compute means
-        vector<int> nPoints;
-        vector<double> sumX, sumY;
-        for (int j = 0; j < k; ++j) {
-            nPoints.push_back(0);
-            sumX.push_back(0.0);
-            sumY.push_back(0.0);
-        }
-
-        // Iterate over points to append data to centroids
-        for (vector<Point>::iterator it = points->begin(); it != points->end();
-             ++it) {
-            int clusterId = it->cluster;
-            nPoints[clusterId] += 1;
-            sumX[clusterId] += it->x;
-            sumY[clusterId] += it->y;
-
-            it->minDist = __DBL_MAX__;  // reset distance
-        }
-        // Compute the new centroids
-        for (vector<Point>::iterator c = begin(centroids); c != end(centroids);
-             ++c) {
-            int clusterId = c - begin(centroids);
-            c->x = sumX[clusterId] / nPoints[clusterId];
-            c->y = sumY[clusterId] / nPoints[clusterId];
-        }
-    }
-
-    // Write to csv
-    ofstream myfile;
-    myfile.open("output.csv");
-    myfile << "x,y,c" << endl;
-
-    for (vector<Point>::iterator it = points->begin(); it != points->end();
-         ++it) {
-        myfile << it->x << "," << it->y << "," << it->cluster << endl;
-    }
-    myfile.close();
-}
-
-int main() {
-    vector<Point> points = readcsv();
-
-    // Run k-means with 100 iterations and for 5 clusters
-    kMeansClustering(&points, 100, 5);
 }
