@@ -42,7 +42,7 @@ vector<Point> readcsv(const string filename,int num_dimensions) {
         // Leemos el valor de cada columna y lo guardamos en los atributos del punto.
         for (int i = 0; i < num_dimensions; i++) {
                 getline(lineStream, word, ';');
-                double value = stod(word);
+                double value = 1000*stod(word);
                 p.vd.push_back(value);
         }
         //inicializamos el clúster al que pertenece en 0.
@@ -54,6 +54,7 @@ vector<Point> readcsv(const string filename,int num_dimensions) {
 
 
 void writecsv(){
+
 }
 
 
@@ -68,8 +69,10 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
         int luck = rand() % points.size();
         centroids[i].vd = points[luck].vd;
         centroids[i].cluster = i;
-        cout << "El Punto " << luck << " es escogido como centroide del cluster " << i << endl; 
+        //cout << "El Punto " << luck << " es escogido como centroide del cluster " << i << endl; 
     }
+
+    /*
 
     for (int i = 0; i < num_clusters; ++i){
         cout << "Cluster " << centroids[i].cluster << " points: " << endl; 
@@ -78,7 +81,8 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
         }
         cout << endl;
     }
-
+    
+    */
     for (int i = 0; i < iterations /*or change */ ; i++){
 
         vector <Point> sumas (num_clusters);
@@ -110,12 +114,14 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
             }
         }
         
-        for (int l = 0; l < num_clusters; ++l){
-            cout <<"cluster " << l << " tiene: " << endl;
-            cout << puntos_x_cluster[l] << " puntos, su suma es igual a: ";
+        
 
-            for (int m = 0; m < num_dimensions; ++m) cout << sumas[l].vd[m]  << " ";
-            cout << "y su mean es ";
+        for (int l = 0; l < num_clusters; ++l){
+            //cout <<"cluster " << l << " tiene: " << endl;
+            //cout << puntos_x_cluster[l] << " puntos, su suma es igual a: ";
+
+            //for (int m = 0; m < num_dimensions; ++m) cout << sumas[l].vd[m]  << " ";
+            //cout << "y su mean es ";
 
             Point mean;
             for (int m = 0; m < num_dimensions; ++m){
@@ -124,11 +130,16 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
 
             centroids[l] = mean;
 
-            for (int m = 0; m < num_dimensions; ++m) cout << mean.vd[m]  << " ";
-            cout << endl;
+            cout << "(";
+
+            for (int m = 0; m < num_dimensions; ++m){
+                cout << mean.vd[m];
+                if (m == 0) cout  << ",";
+            }
+            cout << ")" << " [" << i << "]"<< endl;
         }
         cout << endl;
-
+        
 
     }
 
