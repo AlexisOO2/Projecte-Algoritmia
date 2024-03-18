@@ -7,7 +7,7 @@ lloyd: Lloyd.cpp
 	g++ $(CFLAGS) -o lloyd Lloyd.cpp
 
 kmeans: kmeans.cc
-	g++ $(CFLAGS) -o kmean kmeans
+	g++ $(CFLAGS) -o kmean kmeans.cc
 
 rand_index: rand_index.cc
 	g++ $(CFLAGS) -o rand_index rand_index.cc
