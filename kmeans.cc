@@ -55,8 +55,20 @@ vector<Point> readcsv(const string filename,int num_dimensions) {
 
 
 
-void writecsv(){
+void writecsv(const string filename, vector<Point> points) {
 
+    ofstream outfile;
+    outfile.open(filename, fstream::trunc);
+
+    for (int i = 0; i < points.size(); ++i){
+        for (int j = 0; j < points[0].vd.size(); j++){
+            outfile << points[i].vd[j];
+            if (j != points[0].vd.size()-1) outfile << ";";
+            else outfile << "; " << points[i].cluster;
+        }
+        outfile << endl;
+    }
+    outfile.close();
 }
 
 
@@ -73,7 +85,7 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
         int centnew;
         for (int j = 0; j < points.size(); ++j) {
             Point punto = points[j];
-            int distmin = 100000000;
+            int distmin = INT_MAX;
             int centproper = 0;
             for (int k = 0; k < i; ++k) {
                 //calculem el cluster mes proper a un punt sobre els cluster que tenim
@@ -206,4 +218,5 @@ int main(int argc, char *argv[]) {
 
     lloyds_algorithm(points,k,iterations,d);
 
+    writecsv("output_Lloyd.csv",points);
 }
