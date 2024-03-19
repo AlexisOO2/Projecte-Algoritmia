@@ -23,10 +23,12 @@ struct Point {
         }
         return sqrt(dist);
     }
+
+
 };
 
 void Usage(){
-    cout << "Usage(): ./lloyd filename iterations {ndimensions, labelled, nclusters}" << endl;
+    cout << "Usage(): ./lloyd filename iterations ndimensions {labelled, nclusters}" << endl;
     exit(-1);
 }
 
@@ -60,23 +62,36 @@ void writecsv(){
 
 void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, int num_dimensions){
     vector <Point> centroids (num_clusters);
+    vector <Point> ant_centroids (num_clusters);
 
 
 
     //Escogemos los puntos que serán los centroides de cada cluster aletoriamente
     int luck = rand() % points.size();
-    centroids.pushback() = points[luck].vd;
-    //centroids[i].cluster = i;
+    centroids[0].vd = points[luck].vd;
+    centroids[0].cluster = 0;
     for (int i = 1; i < num_clusters; ++i){
         double distmax = 0.0;
         int centnew;
-        for (int j = 0; j < points; ++j) {
-             double dist = punto.distance(centroids[i-1]);
-             if (dist > distmax) {
-                 distmax = dist;
-                 centnew = j;
+        for (int j = 0; j < points.size(); ++j) {
+            Point punto = points[j];
+            int distmin = 0.0;
+            int centproper = 0;
+            for (int k = 0; k < i; ++k) {
+                double dist = punto.distance(centroids[k]);
+                if (dist < distmin) {
+                    distmin = dist;
+                    centproper = k;
+                }
+            }
+            double dist2 = punto.distance(centroids[centproper]);
+            if (dist2 > distmax) {
+                distmax = dist2;
+                centnew = j;
+            }
         }
-        centroid[i] = points[centnew].vd
+        centroids[i].vd = points[centnew].vd;
+        centroids[i].cluster = centnew;
         //cout << "El Punto " << luck << " es escogido como centroide del cluster " << i << endl; 
     }
 
@@ -91,7 +106,10 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
     }
     
     */
-    for (int i = 0; i < iterations /*or change */ ; i++){
+
+    bool convergence = false;
+
+    for (int i = 0; i < iterations and (not convergence) ; i++){
 
         vector <Point> sumas (num_clusters);
 
@@ -136,6 +154,8 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
                 mean.vd.push_back(sumas[l].vd[m]/puntos_x_cluster[l]);
             }  
 
+            ant_centroids[l] = centroids[l];
+
             centroids[l] = mean;
 
             cout << "(";
@@ -147,13 +167,17 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
             cout << ")" << " [" << i << "]"<< endl;
         }
         cout << endl;
-        
 
+        for (int j = 0; j < num_clusters and (not convergence); ++j){
+            bool change = false; 
+            for (int k = 0; k < num_dimensions and not change; ++k){
+                change = ant_centroids[j].vd[k] != centroids[j].vd[k];
+            }
+            convergence = not change;
+        }
+
+        if (convergence) cout << "Convergencia a la iteracio " << i << endl;
     }
-
-
-
-    //Recalculamos los centroides de los clústers según los puntos que contiene.
 }
 
 
