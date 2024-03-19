@@ -7,6 +7,7 @@
 #include <ctime>
 #include <climits>
 #include <cmath>
+#include <algorithm>
 
 using namespace std;
 
@@ -44,7 +45,8 @@ vector<Point> readcsv(const string filename,int num_dimensions) {
         // Leemos el valor de cada columna y lo guardamos en los atributos del punto.
         for (int i = 0; i < num_dimensions; i++) {
                 getline(lineStream, word, ';');
-                double value = 1000*stod(word);
+                replace( word.begin(), word.end(), ',', '.');
+                double value = stod(word);
                 p.vd.push_back(value);
         }
         //inicializamos el clúster al que pertenece en 0.
@@ -137,7 +139,7 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
             ant_centroids[l] = centroids[l];
 
             centroids[l] = mean;
-
+            /*
             cout << "(";
 
             for (int m = 0; m < num_dimensions; ++m){
@@ -145,8 +147,9 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
                 if (m == 0) cout  << ",";
             }
             cout << ")" << " [" << i << "]"<< endl;
+            */
         }
-        cout << endl;
+        //cout << endl;
 
         for (int j = 0; j < num_clusters and (not convergence); ++j){
             bool change = false; 
@@ -184,6 +187,16 @@ int main(int argc, char *argv[]) {
 
     vector<Point> points = readcsv(filename,d);
 
+    /*
+    for (int i = 0; i < 10; ++i){
+        cout << "Punt " << i << " = ";
+
+        for (int j = 0; j < d; ++j){
+            cout << points[i].vd[j] << " ";
+        }
+        cout << endl;
+    }
+    */
     lloyds_algorithm(points,k,iterations,d);
 
 }
