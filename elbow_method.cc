@@ -9,12 +9,12 @@ struct Point {
     double y;
 };
 
-double distance(const Point& a, const Point& b) {
+double distancia(const Point& a, const Point& b) {
     return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
 }
 
 // Funció per calcular la suma dels quadrats de les distàncies als centroides
-double sumOfSquaredDistances(const vector<Point>& data, const vector<Point>& centroids, const vector<int>& labels) {
+double suma_quadrats_distancies(const vector<Point>& data, const vector<Point>& centroids, const vector<int>& labels) {
     double sum = 0.0;
     for (size_t i = 0; i < data.size(); ++i) {
         double dist = distance(data[i], centroids[labels[i]]);
@@ -24,5 +24,6 @@ double sumOfSquaredDistances(const vector<Point>& data, const vector<Point>& cen
 }
 
 int main() {
+    //Hauria de retornar un double de (k, suma_quadrats_distancies_k)
     return 0;
 }
