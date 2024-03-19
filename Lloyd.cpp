@@ -58,8 +58,8 @@ vector<Point> readcsv(const string filename,int num_dimensions) {
     // output: un fitxer csv igual que el Dataset d'on provenen les dades amb una columna més per assignar el cluster corresponent.
 void writecsv(const string filename, vector<Point> points) {
 
-    fstream outfile;
-    outfile.open(filename);
+    ofstream outfile;
+    outfile.open(filename, fstream::trunc);
 
     for (int i = 0; i < points.size(); ++i){
         for (int j = 0; j < points[0].vd.size(); j++){
@@ -209,6 +209,6 @@ int main(int argc, char *argv[]) {
     */
     lloyds_algorithm(points,k,iterations,d);
 
-    writecsv("output6.csv",points);
+    writecsv("output_Lloyd.csv",points);
 
 } 
