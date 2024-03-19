@@ -64,9 +64,7 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
     vector <Point> centroids (num_clusters);
     vector <Point> ant_centroids (num_clusters);
 
-
-
-    //Escogemos los puntos que serán los centroides de cada cluster aletoriamente
+    //el primer punt es random
     int luck = rand() % points.size();
     centroids[0].vd = points[luck].vd;
     centroids[0].cluster = 0;
@@ -75,15 +73,17 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
         int centnew;
         for (int j = 0; j < points.size(); ++j) {
             Point punto = points[j];
-            int distmin = 0.0;
+            int distmin = 100000000;
             int centproper = 0;
             for (int k = 0; k < i; ++k) {
+                //calculem el cluster mes proper a un punt sobre els cluster que tenim
                 double dist = punto.distance(centroids[k]);
                 if (dist < distmin) {
                     distmin = dist;
                     centproper = k;
                 }
             }
+            //actualitzem distancia maxima com la distancia més llunyana d'un punt al cluster més proper
             double dist2 = punto.distance(centroids[centproper]);
             if (dist2 > distmax) {
                 distmax = dist2;
@@ -91,12 +91,12 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
             }
         }
         centroids[i].vd = points[centnew].vd;
-        centroids[i].cluster = centnew;
-        //cout << "El Punto " << luck << " es escogido como centroide del cluster " << i << endl; 
+        centroids[i].cluster = i;
+       // cout << "centroide " << centnew << "  nou centroide iteracio " << i <<endl; 
     }
 
+    
     /*
-
     for (int i = 0; i < num_clusters; ++i){
         cout << "Cluster " << centroids[i].cluster << " points: " << endl; 
         for (int j = 0; j < num_dimensions; ++j){
@@ -104,8 +104,8 @@ void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, i
         }
         cout << endl;
     }
-    
     */
+    
 
     bool convergence = false;
 
