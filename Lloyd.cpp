@@ -59,7 +59,7 @@ vector<Point> readcsv(const string filename,int num_dimensions) {
 void writecsv(const string filename, vector<Point> points) {
 
     fstream outfile;
-    outfile.open(filename, fstream::);
+    outfile.open(filename);
 
     for (int i = 0; i < points.size(); ++i){
         for (int j = 0; j < points[0].vd.size(); j++){
