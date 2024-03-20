@@ -72,7 +72,7 @@ void writecsv(const string filename, vector<Point> points) {
 }
 
 
-void lloyds_algorithm(vector <Point> points, int num_clusters, int iterations, int num_dimensions){
+void lloyds_algorithm(vector <Point>& points, int num_clusters, int iterations, int num_dimensions){
     vector <Point> centroids (num_clusters);
     vector <Point> ant_centroids (num_clusters);
 
