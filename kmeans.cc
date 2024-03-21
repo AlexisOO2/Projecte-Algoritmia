@@ -125,20 +125,6 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
 
         if (convergence) cout << "Convergencia a la iteracio " << i << endl;
     }
-    //elbow
-    double sumaelbow = 0.0;
-    for (int j = 0; j < points.size(); ++j) {
-        double distmin = INT_MAX;
-        Point punto = points[j];
-        for (int k = 0; k < num_clusters; ++k) {
-            double dist = punto.distance(centroids[k]);
-               if (dist < distmin) {
-                   distmin = dist;
-               }
-        }
-        sumaelbow += distmin;
-    }
-    cout << sumaelbow <<endl;
 }
 
 
