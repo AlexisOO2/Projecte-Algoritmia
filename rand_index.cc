@@ -10,7 +10,6 @@ double calculateRandIndex(const vector<int>& partition1, const vector<int>& part
     int n = partition1.size();
     int a = 0, b = 0, c = 0, d = 0;
 
-
     for (int i = 0; i < n; ++i) {
         for (int j = i + 1; j < n; ++j) {
             if (partition1[i] == partition1[j] && partition2[i] == partition2[j])
@@ -25,9 +24,7 @@ double calculateRandIndex(const vector<int>& partition1, const vector<int>& part
     }
 
 
-    // Calculating Rand Index
-    //double randIndex = (a + b) / static_cast<double>((n * (n - 1)) / 2);
-    double randIndex = (a + b) / (a+b+c+d);
+    double randIndex = static_cast<double>(a + b) / (a + b + c + d);
     return randIndex;
 }
 
@@ -56,7 +53,6 @@ vector <int> readpart (const string filename, int d){
 
 
 int main() {
-    // Exemple de dues particions (els nombres representen els clústers)
     vector<int> partition1 = readpart("output_lloyd.csv",2);
     vector<int> partition2 = readpart("output_kmeans++.csv",2);
 
