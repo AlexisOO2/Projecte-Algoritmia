@@ -3,7 +3,7 @@
 using namespace std;
 
 void Usage(){
-    cout << "Usage(): ./kmeans++ filename iterations ndimensions {labelled, nclusters}" << endl;
+    cout << "Usage(): ./kmeans++ filename iterations ndimensions labelled, nclusters" << endl;
     exit(-1);
 }
  
