@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-
+#include "ClusteringTools.cc"
 
 using namespace std;
 
@@ -31,12 +31,34 @@ double calculateRandIndex(const vector<int>& partition1, const vector<int>& part
     return randIndex;
 }
 
-/*
+vector <int> readpart (const string filename, int d){
+    vector <int> partition;
+    string line,word;
+    ifstream file(filename); //Abrimos el fichero de entrada
+    //Leemos cada fila
+    while (getline(file, line)) {
+        stringstream lineStream(line);
+        Point p; // Inicializamos el punto
+
+        // Leemos el valor de cada columna y lo guardamos en los atributos del punto.
+        for (int i = 0; i < d; i++) {
+                getline(lineStream, word, ';');
+        }
+        getline(lineStream,word,';');
+
+        int cluster = stoi(word);
+
+        //inicializamos el clúster al que pertenece en 0.
+        partition.push_back(cluster);
+    }
+    return partition;
+}
+
+
 int main() {
     // Exemple de dues particions (els nombres representen els clústers)
-    vector<int> partition1 = {0, 0, 1, 1, 2, 2, 3, 3, 4, 4};
-    vector<int> partition2 = {0, 0, 1, 1, 2, 2, 3, 4, 4, 4};
-
+    vector<int> partition1 = readpart("output_lloyd.csv",2);
+    vector<int> partition2 = readpart("output_kmeans++.csv",2);
 
     double randIndex = calculateRandIndex(partition1, partition2);
     cout << "Rand Index: " << randIndex << endl;
@@ -44,4 +66,4 @@ int main() {
 
     return 0;
 }
-*/
+
