@@ -14,54 +14,11 @@ void lloyds_algorithm(vector <Point> &points, int num_clusters, int iterations, 
 
 
     //Escogemos los puntos que serán los centroides de cada cluster aletoriamente
-
     for (int i = 0; i < num_clusters; ++i){
         int luck = rand() % points.size();
         centroids[i].vd = points[luck].vd;
         centroids[i].cluster = i;
         //cout << "El Punto " << luck << " es escogido como centroide del cluster " << i << endl; 
-    }
-
-    //Calcul del elbow method
-    vector <Point> centroids2 (2 * num_clusters);
-    vector <pair<int,double> > Elbow (2 * num_clusters);
-
-    for (int i = 0; i < num_clusters*2; ++i){
-        int luck = rand() % points.size();
-        centroids2[i].vd = points[luck].vd;
-        centroids2[i].cluster = i;
-        double sumaelbow = 0.0;
-        for (int j = 0; j < points.size(); ++j) {
-            Point punto = points[j];
-            int distmin = INT_MAX;
-            for (int k = 0; k < i; ++k) {
-                //calculem el cluster mes proper a un punt sobre els cluster que tenim
-                double dist = punto.distance(centroids2[k]);
-                if (dist < distmin) {
-                    distmin = dist;
-                }
-            
-            }
-            sumaelbow += distmin;
-        }
-        Elbow[i+1] = make_pair(i+1, sumaelbow);
-        //cout << "El Punto " << luck << " es escogido como centroide del cluster " << i << endl; 
-    }
-    //normalitzador elbow method
-    int divisor = 1;
-    int normalitzador = Elbow[2].second;
-    while (normalitzador > 100) {
-        normalitzador /= 10;
-        divisor *= 10;
-        cout << divisor <<endl;
-    }
-
-    //escritura elbow method
-
-
-    
-    for (int i = 1; i <= Elbow.size(); ++i) {
-        cout << "(" << Elbow[i].first << ", " << Elbow[i].second/divisor << ")" << endl;
     }
 
 
@@ -149,7 +106,22 @@ void lloyds_algorithm(vector <Point> &points, int num_clusters, int iterations, 
 
         if (convergence) cout << "Convergencia a la iteracio " << i << endl;
     }
+    //elbow
+    double sumaelbow = 0.0;
+    for (int j = 0; j < points.size(); ++j) {
+        double distmin = INT_MAX;
+        Point punto = points[j];
+        for (int k = 0; k < num_clusters; ++k) {
+            double dist = punto.distance(centroids[k]);
+               if (dist < distmin) {
+                   distmin = dist;
+               }
+        }
+        sumaelbow += distmin;
+    }
+    cout << sumaelbow <<endl;
 }
+
 
 
 
@@ -159,6 +131,7 @@ int main(int argc, char *argv[]) {
     int d = -1; // d = Nº Dimensiones
     bool labelled = false; //etiq = Dataset etiquetat
     int k = -1; // k = Nº Clústers
+    //double sumaelbow = 0.0;
 
     srand(time(0));
 
