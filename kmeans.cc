@@ -10,8 +10,6 @@ void Usage(){
 void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_dimensions){
     vector <Point> centroids (num_clusters);
     vector <Point> ant_centroids (num_clusters);
-    //per fer elbow metod a partir d'una k que ens donen
-    //vector <pair<int,double> > Elbow (2 * num_clusters);
 
     //el primer punt es random
     int luck = rand() % points.size();
@@ -20,7 +18,6 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
     for (int i = 1; i < num_clusters; ++i){
         double distmax = 0.0;
         int centnew;
-        //double sumaelbow = 0.0;
         for (int j = 0; j < points.size(); ++j) {
             Point punto = points[j];
             int distmin = INT_MAX;
@@ -44,58 +41,7 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
         }
         centroids[i].vd = points[centnew].vd;
         centroids[i].cluster = i;
-        //Elbow[i] = make_pair(i, sumaelbow);
-       // cout << "centroide " << centnew << "  nou centroide iteracio " << i <<endl; 
     }
-    //elbow method
-    vector <Point> centroids2 (num_clusters * 2);
-    vector <pair<int,double> > Elbow (2 * num_clusters);
-
-    centroids2[0].vd = points[luck].vd;
-    centroids2[0].cluster = 0;
-    for (int i = 1; i < num_clusters*2; ++i){
-        double distmax = 0.0;
-        int centnew;
-        double sumaelbow = 0.0;
-        for (int j = 0; j < points.size(); ++j) {
-            Point punto = points[j];
-            int distmin = INT_MAX;
-            int centproper = 0;
-            for (int k = 0; k < i; ++k) {
-                //calculem el cluster mes proper a un punt sobre els cluster que tenim
-                double dist = punto.distance(centroids2[k]);
-                
-                if (dist < distmin) {
-                    distmin = dist;
-                    centproper = k;
-                }
-            }
-            sumaelbow += distmin;
-            //actualitzem distancia maxima com la distancia més llunyana d'un punt al cluster més proper
-            double dist2 = punto.distance(centroids2[centproper]);
-            if (dist2 > distmax) {
-                distmax = dist2;
-                centnew = j;
-            }
-        }
-        centroids2[i].vd = points[centnew].vd;
-        centroids2[i].cluster = i;
-        Elbow[i] = make_pair(i, sumaelbow);
-       // cout << "centroide " << centnew << "  nou centroide iteracio " << i <<endl; 
-    }
-    //mormalitzar
-    int divisor = 1;
-    int normalitzador = Elbow[1].second;
-    while (normalitzador > 100) {
-        normalitzador /= 10;
-        divisor *= 10;
-    }
-
-    //escritura elbow method
-    for (int i = 1; i < Elbow.size(); ++i) {
-        cout << "(" << Elbow[i].first << ", " << Elbow[i].second/divisor << ")" << endl;
-    }
-
     
     /*
     for (int i = 0; i < num_clusters; ++i){
@@ -159,13 +105,13 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
 
             centroids[l] = mean;
 
-            cout << "(";
+            //cout << "(";
 
             for (int m = 0; m < num_dimensions; ++m){
-                cout << mean.vd[m];
-                if (m == 0) cout  << ",";
+                //cout << mean.vd[m];
+                //if (m == 0) cout  << ",";
             }
-            cout << ")" << " [" << i << "]"<< endl;
+            //cout << ")" << " [" << i << "]"<< endl;
         }
         cout << endl;
 
@@ -179,7 +125,22 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
 
         if (convergence) cout << "Convergencia a la iteracio " << i << endl;
     }
+    //elbow
+    double sumaelbow = 0.0;
+    for (int j = 0; j < points.size(); ++j) {
+        double distmin = INT_MAX;
+        Point punto = points[j];
+        for (int k = 0; k < num_clusters; ++k) {
+            double dist = punto.distance(centroids[k]);
+               if (dist < distmin) {
+                   distmin = dist;
+               }
+        }
+        sumaelbow += distmin;
+    }
+    cout << sumaelbow <<endl;
 }
+
 
 
 
@@ -189,6 +150,7 @@ int main(int argc, char *argv[]) {
     int d = -1; // d = Nº Dimensiones
     bool labelled = false; //etiq = Dataset etiquetat
     int k = -1; // k = Nº Clústers
+    //double sumaelbow = 0.0;
 
     srand(time(0));
 
