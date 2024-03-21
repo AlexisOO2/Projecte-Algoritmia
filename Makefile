@@ -1,4 +1,4 @@
-all: lloyd kmeans++ rand_index CLIndex
+boall: lloyd kmeans++ rand_index CLIndex elbow1 elbow2
 
 
 CFLAGS = -g -Wall
