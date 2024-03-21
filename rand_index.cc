@@ -27,7 +27,8 @@ double calculateRandIndex(const vector<int>& partition1, const vector<int>& part
 
 
     // Calculating Rand Index
-    double randIndex = (a + b) / static_cast<double>((n * (n - 1)) / 2);
+    //double randIndex = (a + b) / static_cast<double>((n * (n - 1)) / 2);
+    double randIndex = (a + b) / (a+b+c+d);
     return randIndex;
 }
 
@@ -60,10 +61,13 @@ int main() {
     vector<int> partition1 = readpart("output_lloyd.csv",2);
     vector<int> partition2 = readpart("output_kmeans++.csv",2);
 
+    for(int i = 0; i < 10; ++i){
+        cout << partition1[i] << ", " << partition2[i] << endl;
+    }
+
     double randIndex = calculateRandIndex(partition1, partition2);
     cout << "Rand Index: " << randIndex << endl;
 
 
     return 0;
 }
-
