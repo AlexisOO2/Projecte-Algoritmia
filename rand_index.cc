@@ -11,7 +11,6 @@ double calculateRandIndex(const vector<int>& partition1, const vector<int>& part
     int a = 0, b = 0, c = 0, d = 0;
 
 
-    // Calculating values of a, b, c, and d
     for (int i = 0; i < n; ++i) {
         for (int j = i + 1; j < n; ++j) {
             if (partition1[i] == partition1[j] && partition2[i] == partition2[j])
