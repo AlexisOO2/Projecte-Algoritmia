@@ -3,7 +3,7 @@
 using namespace std;
 
 void Usage(){
-    cout << "Usage(): ./lloyd filename iterations ndimensions {labelled, nclusters}" << endl;
+    cout << "Usage(): ./lloyd filename iterations ndimensions labelled, nclusters" << endl;
     exit(-1);
 }
 
