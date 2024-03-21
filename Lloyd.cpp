@@ -107,6 +107,7 @@ void lloyds_algorithm(vector <Point> &points, int num_clusters, int iterations, 
         if (convergence) cout << "Convergencia a la iteracio " << i << endl;
     }
     //elbow
+    /*
     double sumaelbow = 0.0;
     for (int j = 0; j < points.size(); ++j) {
         double distmin = INT_MAX;
@@ -120,6 +121,7 @@ void lloyds_algorithm(vector <Point> &points, int num_clusters, int iterations, 
         sumaelbow += distmin;
     }
     cout << sumaelbow <<endl;
+    */
 }
 
 
