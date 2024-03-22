@@ -21,6 +21,8 @@ L'execució per terminal tindría un aspecte similar al següent:
 
 - Algorisme  K-means++ 
 `./kmeans++ datasets/Dataset1.csv 100 16 0 7`          
-`Convergencia a la iteracio 6`
-`finished computation at Fri Mar 20 22:14:55 2024`
-`elapsed time: 0.476043s`
+```
+Convergencia a la iteracio 6
+finished computation at Fri Mar 20 22:14:55 2024
+elapsed time: 0.476043s 
+```
