@@ -22,18 +22,6 @@ void lloyds_algorithm(vector <Point> &points, int num_clusters, int iterations, 
     }
 
 
-    /*
-
-    for (int i = 0; i < num_clusters; ++i){
-        cout << "Cluster " << centroids[i].cluster << " points: " << endl; 
-        for (int j = 0; j < num_dimensions; ++j){
-            cout << centroids[i].vd[j] << " ";
-        }
-        cout << endl;
-    }
-    
-    */
-
     bool convergence = false;
 
     for (int i = 0; i < iterations and (not convergence) ; i++){
@@ -52,7 +40,6 @@ void lloyds_algorithm(vector <Point> &points, int num_clusters, int iterations, 
             double dist_min = INT_MAX;
             for (int k = 0; k < num_clusters; ++k){
                 double dist = punto.distance(centroids[k]);
-                //cout << "distancia = " << dist << " al centroide " << k << endl;
 
                 if (dist < dist_min){
                     dist_min = dist;
@@ -70,11 +57,6 @@ void lloyds_algorithm(vector <Point> &points, int num_clusters, int iterations, 
         
 
         for (int l = 0; l < num_clusters; ++l){
-            //cout <<"cluster " << l << " tiene: " << endl;
-            //cout << puntos_x_cluster[l] << " puntos, su suma es igual a: ";
-
-            //for (int m = 0; m < num_dimensions; ++m) cout << sumas[l].vd[m]  << " ";
-            //cout << "y su mean es ";
 
             Point mean;
             for (int m = 0; m < num_dimensions; ++m){
@@ -84,17 +66,7 @@ void lloyds_algorithm(vector <Point> &points, int num_clusters, int iterations, 
             ant_centroids[l] = centroids[l];
 
             centroids[l] = mean;
-            /*
-            cout << "(";
-
-            for (int m = 0; m < num_dimensions; ++m){
-                cout << mean.vd[m];
-                if (m == 0) cout  << ",";
-            }
-            cout << ")" << " [" << i << "]"<< endl;
-            */
         }
-        //cout << endl;
 
         for (int j = 0; j < num_clusters and (not convergence); ++j){
             bool change = false; 
@@ -106,22 +78,6 @@ void lloyds_algorithm(vector <Point> &points, int num_clusters, int iterations, 
 
         if (convergence) cout << "Convergencia a la iteracio " << i << endl;
     }
-    //elbow
-    /*
-    double sumaelbow = 0.0;
-    for (int j = 0; j < points.size(); ++j) {
-        double distmin = INT_MAX;
-        Point punto = points[j];
-        for (int k = 0; k < num_clusters; ++k) {
-            double dist = punto.distance(centroids[k]);
-               if (dist < distmin) {
-                   distmin = dist;
-               }
-        }
-        sumaelbow += distmin;
-    }
-    cout << sumaelbow <<endl;
-    */
 }
 
 
@@ -133,7 +89,6 @@ int main(int argc, char *argv[]) {
     int d = -1; // d = Nº Dimensiones
     bool labelled = false; //etiq = Dataset etiquetat
     int k = -1; // k = Nº Clústers
-    //double sumaelbow = 0.0;
 
     srand(time(0));
 
@@ -146,20 +101,9 @@ int main(int argc, char *argv[]) {
     if (argc >= 5) labelled = (atoi(argv[4]) == 1);
     if (argc == 6) k = atoi(argv[5]);
 
-    //if (labelled) d++; 
 
     vector<Point> points = readcsv(filename,d);
 
-    /*
-    for (int i = 0; i < 10; ++i){
-        cout << "Punt " << i << " = ";
-
-        for (int j = 0; j < d; ++j){
-            cout << points[i].vd[j] << " ";
-        }
-        cout << endl;
-    }
-    */
     lloyds_algorithm(points,k,iterations,d);
 
     writecsv("output_lloyd.csv",points);
