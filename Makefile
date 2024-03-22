@@ -1,7 +1,7 @@
 all: lloyd kmeans++ rand_index CLIndex elbow1 elbow2
 
 
-CFLAGS = -g
+CFLAGS = -g -Wall
 
 lloyd: Lloyd.cpp ClusteringTools.cc
 	g++ $(CFLAGS) -o lloyd Lloyd.cpp
