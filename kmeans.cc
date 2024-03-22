@@ -30,7 +30,7 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
                     distmin = dist;
                     centproper = k;
                 }
-                /
+                
             }
             //actualitzem distancia maxima com la distancia més llunyana d'un punt al cluster més proper
             double dist2 = punto.distance(centroids[centproper]);
@@ -90,8 +90,6 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
 
             centroids[l] = mean;
 
-            for (int m = 0; m < num_dimensions; ++m){
-            }
 
         }
 
