@@ -12,13 +12,9 @@ void Usage(){
 
 
 void lloyds_algorithm(vector <Point> &points, int iterations, int num_dimensions, vector <pair<int,double> > &Elbow, int &c){
-    //vector <pair<int,double> > Elbow(500);
-    //int c = 1;
     double sumaact = -1;
     double ultimasum = -1;
-    //cout <<"dins"<<endl;
     while (ultimasum/sumaact > 1.01 or c < 3) {
-        //cout << "iter " << c <<endl;
         vector <Point> centroids (c);
         vector <Point> ant_centroids (c);
 
@@ -29,21 +25,7 @@ void lloyds_algorithm(vector <Point> &points, int iterations, int num_dimensions
             int luck = rand() % points.size();
             centroids[i].vd = points[luck].vd;
             centroids[i].cluster = i;
-            //cout << "El Punto " << luck << " es escogido como centroide del cluster " << i << endl; 
         }
-
-
-        /*
-
-        for (int i = 0; i < num_clusters; ++i){
-            cout << "Cluster " << centroids[i].cluster << " points: " << endl; 
-            for (int j = 0; j < num_dimensions; ++j){
-                cout << centroids[i].vd[j] << " ";
-            }
-            cout << endl;
-        }
-        
-        */
 
         bool convergence = false;
 
@@ -63,8 +45,7 @@ void lloyds_algorithm(vector <Point> &points, int iterations, int num_dimensions
                 double dist_min = INT_MAX;
                 for (int k = 0; k < c; ++k){
                     double dist = punto.distance(centroids[k]);
-                    //cout << "distancia = " << dist << " al centroide " << k << endl;
-
+                    
                     if (dist < dist_min){
                         dist_min = dist;
                         points[j].cluster = k;
@@ -81,11 +62,6 @@ void lloyds_algorithm(vector <Point> &points, int iterations, int num_dimensions
             
 
             for (int l = 0; l < c; ++l){
-                //cout <<"cluster " << l << " tiene: " << endl;
-                //cout << puntos_x_cluster[l] << " puntos, su suma es igual a: ";
-
-                //for (int m = 0; m < num_dimensions; ++m) cout << sumas[l].vd[m]  << " ";
-                //cout << "y su mean es ";
 
                 Point mean;
                 for (int m = 0; m < num_dimensions; ++m){
@@ -95,17 +71,8 @@ void lloyds_algorithm(vector <Point> &points, int iterations, int num_dimensions
                 ant_centroids[l] = centroids[l];
 
                 centroids[l] = mean;
-                /*
-                cout << "(";
 
-                for (int m = 0; m < num_dimensions; ++m){
-                    cout << mean.vd[m];
-                    if (m == 0) cout  << ",";
-                }
-                cout << ")" << " [" << i << "]"<< endl;
-                */
             }
-            //cout << endl;
 
             for (int j = 0; j < c and (not convergence); ++j){
                 bool change = false; 
@@ -133,7 +100,6 @@ void lloyds_algorithm(vector <Point> &points, int iterations, int num_dimensions
         sumaact = sumaelbow;
         Elbow[c] = make_pair(c,sumaelbow);
         ++c;
-        //cout << "volta " << c <<endl;
     }
     int divisor = 1;
     while (Elbow[1].second > 100) {
@@ -162,36 +128,21 @@ int main(int argc, char *argv[]) {
     int d = -1; // d = Nº Dimensiones
     bool labelled = false; //etiq = Dataset etiquetat
     int k = -1; // k = Nº Clústers
-    //double sumaelbow = 0.0;
     vector <pair<int,double> > Elbow(20);
     int c = 1;
 
     srand(time(0));
 
-    if (argc <= 3) Usage();
-    if (argc >= 4){
-            filename = argv[1];
-            iterations = atoi(argv[2]);
-            d = atoi(argv[3]);
+    if (argc != 4) Usage();
+    else {
+        filename = argv[1];
+        iterations = atoi(argv[2]);
+        d = atoi(argv[3]);
     }
-    if (argc >= 5) labelled = (atoi(argv[4]) == 1);
-    //if (argc == 6) k = atoi(argv[5]);
 
-    //if (labelled) d++; 
 
     vector<Point> points = readcsv(filename,d);
 
-    /*
-    for (int i = 0; i < 10; ++i){
-        cout << "Punt " << i << " = ";
-
-        for (int j = 0; j < d; ++j){
-            cout << points[i].vd[j] << " ";
-        }
-        cout << endl;
-    }
-    */
-    //cout << "entra" <<endl;
     lloyds_algorithm(points,iterations,d, Elbow, c);
 
     writeres("output_elbow_lloyd.csv", Elbow, c);
