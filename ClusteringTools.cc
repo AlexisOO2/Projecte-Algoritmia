@@ -54,6 +54,8 @@ void writecsv(const string filename, vector<Point> points) {
     ofstream outfile;
     outfile.open(filename, fstream::trunc);
 
+    outfile << "X   Y   label" << endl; 
+
     for (int i = 0; i < points.size(); ++i){
         for (int j = 0; j < points[0].vd.size(); j++){
             outfile << points[i].vd[j];
