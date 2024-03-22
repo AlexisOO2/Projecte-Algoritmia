@@ -15,12 +15,12 @@ L'execució per terminal tindría un aspecte similar al següent:
 
 - Algorisme de lloyd:
 `./lloyd datasets/Dataset1.csv 100 16 0 7`
-`Convergencia a la iteracio 8
-`finished computation at Fri Mar 20 22:14:42 2024
-`elapsed time: 0.425727s
+`Convergencia a la iteracio 8`
+`finished computation at Fri Mar 20 22:14:42 2024`
+`elapsed time: 0.425727s`
 
 - Algorisme  K-means++ 
-`./kmeans++ datasets/Dataset1.csv 100 16 0 7                 
-`Convergencia a la iteracio 6
-`finished computation at Fri Mar 22 22:14:55 2024
-`elapsed time: 0.476043s
+`./kmeans++ datasets/Dataset1.csv 100 16 0 7`          
+`Convergencia a la iteracio 6`
+`finished computation at Fri Mar 20 22:14:55 2024`
+`elapsed time: 0.476043s`
