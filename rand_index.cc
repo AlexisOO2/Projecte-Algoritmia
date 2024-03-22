@@ -55,11 +55,7 @@ vector <int> readpart (const string filename, int d){
 int main() {
     vector<int> partition1 = readpart("output_lloyd.csv",2);
     vector<int> partition2 = readpart("output_kmeans++.csv",2);
-
-    for(int i = 0; i < 10; ++i){
-        cout << partition1[i] << ", " << partition2[i] << endl;
-    }
-
+    cout << "Calculant RandIndex ..." << endl;
     double randIndex = calculateRandIndex(partition1, partition2);
     cout << "Rand Index: " << randIndex << endl;
 
