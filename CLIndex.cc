@@ -55,8 +55,10 @@ vector <vector <Point>> readclusters(const string filename, int d, int nclusters
     string line,word;
     ifstream file(filename); //Abrimos el fichero de entrada
     //Leemos cada fila
+    getline(file,line);
     while (getline(file, line)) {
         stringstream lineStream(line);
+
         Point p; // Inicializamos el punto
 
         // Leemos el valor de cada columna y lo guardamos en los atributos del punto.
@@ -97,6 +99,8 @@ vector <Point> calc_centroids(vector < vector <Point>>& clusters){
 }
 
 int main(int argc, char *argv[]){
+	std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
 	string filename = ""; // file = Dataset
     int d = -1; // d = Nº Dimensiones
     int k = -1; // k = Nº Clústers
@@ -116,4 +120,11 @@ int main(int argc, char *argv[]){
  
 	double CH = Cal_Har_Index(clusters,centroids);
 	cout <<"Calinski–Harabasz Index = " << CH << endl;
+	end = std::chrono::system_clock::now();
+    
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+ 
+    cout << "finished computation at " << std::ctime(&end_time)
+              << "elapsed time: " << elapsed_seconds.count() << "s\n";
 }

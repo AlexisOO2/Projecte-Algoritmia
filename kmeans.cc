@@ -109,6 +109,8 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
 
 
 int main(int argc, char *argv[]) {
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
     string filename = ""; // file = Dataset
     int iterations; // Nº de iteracions
     int d = -1; // d = Nº Dimensiones
@@ -131,4 +133,11 @@ int main(int argc, char *argv[]) {
     kmeanspp(points,k,iterations,d);
 
     writecsv("output_kmeans++.csv",points);
+    end = std::chrono::system_clock::now();
+    
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+ 
+    cout << "finished computation at " << std::ctime(&end_time)
+              << "elapsed time: " << elapsed_seconds.count() << "s\n";
 }

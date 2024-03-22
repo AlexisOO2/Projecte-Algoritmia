@@ -7,6 +7,7 @@
 #include <ctime>
 #include <climits>
 #include <cmath>
+#include <chrono>
 #include <algorithm>
 
 using namespace std;
@@ -54,7 +55,7 @@ void writecsv(const string filename, vector<Point> points) {
     ofstream outfile;
     outfile.open(filename, fstream::trunc);
 
-    outfile << "X   Y   label" << endl; 
+    outfile << "col1;   col2;   label" << endl; 
 
     for (int i = 0; i < points.size(); ++i){
         for (int j = 0; j < points[0].vd.size(); j++){

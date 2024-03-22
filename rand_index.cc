@@ -33,6 +33,7 @@ vector <int> readpart (const string filename, int d){
     string line,word;
     ifstream file(filename); //Abrimos el fichero de entrada
     //Leemos cada fila
+    getline(file,line); 
     while (getline(file, line)) {
         stringstream lineStream(line);
         Point p; // Inicializamos el punto
@@ -53,12 +54,19 @@ vector <int> readpart (const string filename, int d){
 
 
 int main() {
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+
     vector<int> partition1 = readpart("output_lloyd.csv",2);
     vector<int> partition2 = readpart("output_kmeans++.csv",2);
     cout << "Calculant RandIndex ..." << endl;
     double randIndex = calculateRandIndex(partition1, partition2);
     cout << "Rand Index: " << randIndex << endl;
-
-
-    return 0;
+    end = std::chrono::system_clock::now();
+    
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+ 
+    cout << "finished computation at " << std::ctime(&end_time)
+              << "elapsed time: " << elapsed_seconds.count() << "s\n";
 }
