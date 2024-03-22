@@ -30,7 +30,7 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
                     distmin = dist;
                     centproper = k;
                 }
-                //sumaelbow += distmin;
+                /
             }
             //actualitzem distancia maxima com la distancia més llunyana d'un punt al cluster més proper
             double dist2 = punto.distance(centroids[centproper]);
@@ -42,16 +42,6 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
         centroids[i].vd = points[centnew].vd;
         centroids[i].cluster = i;
     }
-    
-    /*
-    for (int i = 0; i < num_clusters; ++i){
-        cout << "Cluster " << centroids[i].cluster << " points: " << endl; 
-        for (int j = 0; j < num_dimensions; ++j){
-            cout << centroids[i].vd[j] << " ";
-        }
-        cout << endl;
-    }
-    */
     
 
     bool convergence = false;
@@ -72,7 +62,6 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
             double dist_min = INT_MAX;
             for (int k = 0; k < num_clusters; ++k){
                 double dist = punto.distance(centroids[k]);
-                //cout << "distancia = " << dist << " al centroide " << k << endl;
 
                 if (dist < dist_min){
                     dist_min = dist;
@@ -90,11 +79,7 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
         
 
         for (int l = 0; l < num_clusters; ++l){
-            //cout <<"cluster " << l << " tiene: " << endl;
-            //cout << puntos_x_cluster[l] << " puntos, su suma es igual a: ";
 
-            //for (int m = 0; m < num_dimensions; ++m) cout << sumas[l].vd[m]  << " ";
-            //cout << "y su mean es ";
 
             Point mean;
             for (int m = 0; m < num_dimensions; ++m){
@@ -105,15 +90,10 @@ void kmeanspp(vector <Point>& points, int num_clusters, int iterations, int num_
 
             centroids[l] = mean;
 
-            //cout << "(";
-
             for (int m = 0; m < num_dimensions; ++m){
-                //cout << mean.vd[m];
-                //if (m == 0) cout  << ",";
             }
-            //cout << ")" << " [" << i << "]"<< endl;
+
         }
-        cout << endl;
 
         for (int j = 0; j < num_clusters and (not convergence); ++j){
             bool change = false; 
@@ -136,7 +116,6 @@ int main(int argc, char *argv[]) {
     int d = -1; // d = Nº Dimensiones
     bool labelled = false; //etiq = Dataset etiquetat
     int k = -1; // k = Nº Clústers
-    //double sumaelbow = 0.0;
 
     srand(time(0));
 
@@ -148,8 +127,6 @@ int main(int argc, char *argv[]) {
     }
     if (argc >= 5) labelled = (atoi(argv[4]) == 1);
     if (argc == 6) k = atoi(argv[5]);
-
-    //if (labelled) d++; 
 
     vector<Point> points = readcsv(filename,d);
 
