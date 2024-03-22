@@ -24,19 +24,6 @@ struct Point {
         }
         return sqrt(dist);
     }
-
-    //Operación que 
-    bool operator == (Point const& p){
-    	bool equal = true;
-    	if (this->vd.size() != p.vd.size()) equal = false;
-    	else {
-    		for (int i = 0; i < this->vd.size() and equal; ++i){
-                equal = this->vd[i] == p.vd[i];
-            }
-    	} 
-        return equal;
-    }
-
 };
 
 vector<Point> readcsv(const string filename,int num_dimensions) {
