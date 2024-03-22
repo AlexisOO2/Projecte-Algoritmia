@@ -29,15 +29,13 @@ double Cal_Har_Index( vector < vector <Point>> &clusters, vector <Point> &centro
 
     for (int i = 0; i < ndimensions; ++i){
     	gcentroid.vd[i] /= total_punts;
-    	cout << gcentroid.vd[i] << ",";
     }
-    cout << endl;
 
 	double WCSS = 0.0;
 	double BCSS = 0.0;
+	
 	for (int i = 0; i < nclusters;++i){
 		double wsum = 0.0;
-
 
 		for (int j = 0; j < clusters[i].size(); ++j){
 			wsum += clusters[i][j].distance(centroids[i]);
@@ -66,10 +64,11 @@ vector <vector <Point>> readclusters(const string filename, int d, int nclusters
                 getline(lineStream, word, ';');
                 p.vd.push_back(stod(word));
         }
+        //Leemos el valor de la última columna que contiene el cluster al que pertenece el punto 
         getline(lineStream,word,';');
 
         int cluster = stoi(word);
-        //inicializamos el clúster al que pertenece en 0.
+        //Colocamos el punto en el cluster al que pertenece
         clusters[cluster].push_back(p);
     }
     return clusters;
